@@ -1,0 +1,46 @@
+version: "3"
+services:
+  db:
+    image: postgres:11.6-alpine
+    container_name: hedgedoc_db
+    restart: always
+    environment:
+      - POSTGRES_USER=hedgedoc
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=hedgedoc
+    volumes:
+      - "db-data:/var/lib/postgresql/data"
+    networks:
+      intranet:
+        aliases:
+          - hedgedoc.docker.local
+
+  hedgedoc:
+    image: quay.io/hedgedoc/hedgedoc:latest
+    container_name: hegedoc
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - CMD_DB_URL=postgres://hedgedoc:${DB_PASSWORD}@hedgedoc.docker.local/hedgedoc
+      - CMD_ALLOW_ANONYMOUS=false
+      - CMD_IMAGE_UPLOAD_FILESYSTEN=filesystem
+      - CMD_USECDN=false
+    volumes:
+      - upload-data:/home/hackmd/app/public/uploads
+    ports:
+      - "3000:3000"
+    networks:
+      intranet:
+      www:
+
+
+networks:
+  intranet:
+    external: true
+  www:
+    external: true
+
+volumes:
+  db-data: {}
+  upload-data: {}

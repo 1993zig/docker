@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  mkdocs:
+    container_name: mkdocs
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: 0.50
+          memory: 2048M
+    image: polinux/mkdocs:latest
+    ports:
+      - 8000:8000
+    environment:
+      ADD_MODULES: 'fontawesome-markdown mkdocs-git-revision-date-localized-plugin mkdocs-git-revision-date-plugin mkdocs-material'
+      FAST_MODE: 'true'
+      DOCS_DIRECTORY: '/mkdocs'
+      GIT_REPO: {GIT_URL}
+      GIT_SSL_NO_VERIFY: 'true'
+      UPDATE_INTERVAL: 1
+      AUTO_UPDATE: 'true'
+
+networks:
+  default:
+    external:
+      name: ${NETWORK}

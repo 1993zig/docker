@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+  db:
+    image: mariadb:10.5
+    container_name: ts3_db
+    deploy:
+      resources:
+        limits:
+          cpus: 0.25
+          memory: 1024M
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "{{ DB_PASSWORD }}"
+      MYSQL_DATABASE: teamspeak
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      intranet:
+        aliases:
+          - teamspeak.docker.local
+
+  ts3:
+    image: teamspeak:3.13.5
+    container_name: ts3_server
+    deploy:
+      resources:
+        limits:
+          cpus: 0.25
+          memory: 1024M
+    restart: always
+    depends_on:
+      - db
+    environment:
+      TS3SERVER_DB_PLUGIN: ts3db_mariadb
+      TS3SERVER_DB_SQLCREATEPATH: create_mariadb
+      TS3SERVER_DB_HOST: teamspeak.docker.local
+      TS3SERVER_DB_USER: root
+      TS3SERVER_DB_PASSWORD: "{{ DB_PASSWORD }}"
+      TS3SERVER_DB_NAME: teamspeak
+      TS3SERVER_DB_WAITUNTILREADY: 30
+      TS3SERVER_LICENSE: accept
+    volumes:
+      - server-data:/var/ts3server/
+    ports:
+      - 9987:9987/udp
+      - 10011:10011
+      - 30033:30033
+    networks:
+      intranet:
+      www:
+
+networks:
+  intranet:
+    external: true
+  www:
+    external: true
+
+volumes:
+  db-data: {}
+  server-data: {}

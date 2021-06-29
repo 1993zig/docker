@@ -1,0 +1,27 @@
+version: "3"
+services:
+  redbot:
+    image: "phasecorex/red-discordbot:latest"
+    container_name: getonmylvl
+    restart: always
+    deploy:
+      resources:
+          limits:
+            cpus: 0.50
+            memory: 2048M
+    environment:
+      - TOKEN=${BOT_TOKEN}
+      - REDBOT_VERSION=${REDBOT_VERSION}
+      - PREFIX=>
+      - TZ=Europe/Berlin
+      - EXTRA_ARGS= --dev --owner ${OWNER_ID} #--disable-intent presences
+    volumes:
+      - data:/data
+      - config:/config
+networks:
+  default:
+    external:
+      name: ${NETWORK}
+volumes:
+  data: {}
+  config: {}

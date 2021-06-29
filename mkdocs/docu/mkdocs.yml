@@ -1,0 +1,51 @@
+site_name: 'Documentation'
+repo_url: ''
+repo_name: ''
+theme:
+  name: 'material'
+
+#  favicon: assets/images/favicon.png
+#  logo: assets/images/logo.jpg
+
+  # Don't include MkDocs' JavaScript
+  include_search_page: false
+  search_index_only: true
+
+  # Default values, taken from mkdocs_theme.yml
+  language: en
+  features:
+    - content.tabs.link
+    - navigation.instant
+    - navigation.sections
+    - navigation.tabs
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - scheme: slate
+      primary: red
+      accent: red
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+
+# Plugins
+plugins:
+  - search
+
+# Page tree
+nav:
+  - Home: index.md
+
+
+copyright: Copyright &copy; 2021
