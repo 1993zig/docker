@@ -12,7 +12,7 @@ services:
     environment:
       - TOKEN=${BOT_TOKEN}
       - REDBOT_VERSION=${REDBOT_VERSION}
-      - PREFIX=>
+      - PREFIX=${PREFIX}
       - TZ=Europe/Berlin
       - EXTRA_ARGS= --dev --owner ${OWNER_ID} #--disable-intent presences
     volumes:
