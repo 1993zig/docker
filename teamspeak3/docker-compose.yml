@@ -4,12 +4,12 @@ services:
   db:
     image: mariadb:10.5
     container_name: ts3_db
+    restart: always
     deploy:
       resources:
         limits:
-          cpus: 0.25
-          memory: 1024M
-    restart: always
+          cpus: 0.50
+          memory: 2048M
     environment:
       MYSQL_ROOT_PASSWORD: "{{ DB_PASSWORD }}"
       MYSQL_DATABASE: teamspeak
@@ -18,23 +18,23 @@ services:
     networks:
       intranet:
         aliases:
-          - teamspeak.docker.local
+          - ts3_db.docker.local
 
-  ts3:
-    image: teamspeak:3.13.5
+  server:
+    image: teamspeak:latest
     container_name: ts3_server
+    restart: always
     deploy:
       resources:
         limits:
-          cpus: 0.25
-          memory: 1024M
-    restart: always
+          cpus: 0.50
+          memory: 2048M
     depends_on:
       - db
     environment:
       TS3SERVER_DB_PLUGIN: ts3db_mariadb
       TS3SERVER_DB_SQLCREATEPATH: create_mariadb
-      TS3SERVER_DB_HOST: teamspeak.docker.local
+      TS3SERVER_DB_HOST: ts3_db.docker.local
       TS3SERVER_DB_USER: root
       TS3SERVER_DB_PASSWORD: "{{ DB_PASSWORD }}"
       TS3SERVER_DB_NAME: teamspeak
@@ -48,7 +48,28 @@ services:
       - 30033:30033
     networks:
       intranet:
+        aliases:
+          - ts3.docker.local
       www:
+
+  bot:
+    image: phaldan/jts3servermod:6
+    container_name: ts3_bot
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: 0.50
+          memory: 2048M
+    depends_on:
+      - db
+      - server
+    volumes:
+      - ${PWD}/config:/JTS3ServerMod/config
+      - bot-log:/JTS3ServerMod/log
+      - bot-plugins:/JTS3ServerMod/plugins
+    networks:
+      intranet:
 
 networks:
   intranet:
@@ -59,3 +80,5 @@ networks:
 volumes:
   db-data: {}
   server-data: {}
+  bot-log: {}
+  bot-plugins: {}
