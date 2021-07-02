@@ -7,7 +7,7 @@ services:
     deploy:
       resources:
           limits:
-            cpus: 0.50
+            cpus: 0.30
             memory: 2048M
     environment:
       - TOKEN=${BOT_TOKEN}
