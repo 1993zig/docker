@@ -2,7 +2,7 @@ version: "3"
 services:
   redbot:
     image: "phasecorex/red-discordbot:latest"
-    container_name: bruni
+    container_name: ${CONTAINER_NAME}
     restart: always
     deploy:
       resources:
