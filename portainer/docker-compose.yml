@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   portainer:
     image: portainer/portainer-ce:latest
@@ -7,9 +7,12 @@ services:
     deploy:
       resources:
         limits:
-          cpus: 0.50
+          cpus: 0.5
           memory: 2048M
+    networks:
+      - www
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - data:/data
     ports:
@@ -17,9 +20,8 @@ services:
     command: -H unix:///var/run/docker.sock
 
 networks:
-  default:
-    external:
-      name: ${NETWORK}
+  www:
+    external: true
 
 volumes:
   data: {}
