@@ -1,0 +1,16 @@
+version: '3'
+services:
+  ara:
+    image: docker.io/recordsansible/ara-api:latest
+    container_name: ara-api
+    restart: always
+    networks:
+      - external
+    volumes:
+      - ./araserver:/opt/ara
+    ports:
+      - "8000:8000"
+
+networks:
+  external:
+    external: true
