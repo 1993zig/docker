@@ -1,13 +1,13 @@
 version: "3"
 services:
   db:
-    image: postgres:11.6-alpine
+    image: postgres:${DB_VERSION}
     container_name: hedgedoc_db
     restart: always
     deploy:
       resources:
         limits:
-          cpus: 0.50
+          cpus: '0.50'
           memory: 2048M
     environment:
       - POSTGRES_USER=hedgedoc
@@ -21,23 +21,27 @@ services:
           - hedgedoc_db.docker.local
 
   hedgedoc:
-    image: quay.io/hedgedoc/hedgedoc:latest
+    image: quay.io/hedgedoc/hedgedoc:${VERSION}
     container_name: hegedoc
     restart: always
     deploy:
       resources:
         limits:
-          cpus: 0.50
+          cpus: '0.50'
           memory: 2048M
     depends_on:
       - db
     environment:
-      - CMD_DB_URL=postgres://hedgedoc:${DB_PASSWORD}@hedgedoc_db.docker.local/hedgedoc
-      - CMD_ALLOW_ANONYMOUS=false
-      - CMD_IMAGE_UPLOAD_FILESYSTEN=filesystem
+      - CMD_DB_URL=postgres://hedgedoc:${DB_PASSWORD}@hedgedoc_db.docker.local:5432/hedgedoc
+      - CMD_ALLOW_PDF_EXPORT=true
       - CMD_USECDN=false
+      - CMD_ALLOW_EMAIL_REGISTER=false
+      - CMD_IMAGE_UPLOAD_TYPE=filesystem
+      - CMD_ALLOW_ANONYMOUS=false
+      - CMD_ALLOW_FREEURL=true
+      - CMD_REQUIRE_FREEURL_AUTHENTICATION=true    
     volumes:
-      - upload-data:/home/hackmd/app/public/uploads
+      - upload-data:/hedgedoc/public/uploads
     ports:
       - "3000:3000"
     networks:
