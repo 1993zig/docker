@@ -6,9 +6,11 @@ services:
     restart: always
     deploy:
       resources:
-          limits:
-            cpus: 0.30
-            memory: 2048M
+        limits:
+          cpus: '0.5'
+          memory: 2048M
+      restart_policy:
+        condition: on-failure
     environment:
       - TOKEN=${TOKEN}
       - PREFIX=${PREFIX}
