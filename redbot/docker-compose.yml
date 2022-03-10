@@ -10,11 +10,10 @@ services:
             cpus: 0.30
             memory: 2048M
     environment:
-      - TOKEN=${BOT_TOKEN}
-      - REDBOT_VERSION=${REDBOT_VERSION}
+      - TOKEN=${TOKEN}
       - PREFIX=${PREFIX}
       - TZ=Europe/Berlin
-      - EXTRA_ARGS= --dev --owner ${OWNER_ID} #--disable-intent presences
+      - EXTRA_ARGS= --dev --owner ${OID} #--disable-intent presences
     volumes:
       - data:/data
       - config:/config
