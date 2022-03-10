@@ -15,6 +15,7 @@ services:
       - TOKEN=${TOKEN}
       - PREFIX=${PREFIX}
       - TZ=Europe/Berlin
+      - REDBOT_VERSION=${VERSION}
       - EXTRA_ARGS= --dev --owner ${OID} #--disable-intent presences
     volumes:
       - data:/data
