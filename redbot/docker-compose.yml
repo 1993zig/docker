@@ -1,29 +1,28 @@
-version: "3"
+---
+version: '3.8'
+
 services:
-  redbot:
+  bot:
     image: "phasecorex/red-discordbot:latest"
-    container_name: ${CNAME}
-    restart: always
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 2048M
-      restart_policy:
-        condition: on-failure
+    mem_limit: 512m
+    cpus: 0.5
+    restart: unless-stopped
     environment:
-      - TOKEN=${TOKEN}
-      - PREFIX=${PREFIX}
-      - TZ=Europe/Berlin
-      - REDBOT_VERSION=${VERSION}
-      - EXTRA_ARGS= --dev --owner ${OID} #--disable-intent presences
+      TOKEN: ${TOKEN}
+      PREFIX: ${PREFIX}
+      TZ: "Europe/Berlin"
+      REDBOT_VERSION: ${REDBOT_VERSION}
+      EXTRA_ARGS: "--dev --owner ${OID}" #--disable-intent presences
+    networks:
+      - external
     volumes:
       - data:/data
       - config:/config
+
 networks:
-  default:
-    external:
-      name: ${NETWORK}
+  external:
+    external: true
+
 volumes:
   data: {}
   config: {}
